@@ -139,3 +139,26 @@ class GetFixtureEvents(View):
 
         except Exception as e:
             return JsonResponse({'error': str(e)})
+
+class GetStandings(View):
+    def get(self, request):
+        options = {
+            'method': 'GET',
+            'url': 'https://api-football-v1.p.rapidapi.com/v3/standings',
+            'params': {
+                'season': request.GET.get('season', '2023'),
+                'league': '39'
+            },
+            'headers': {
+                'X-RapidAPI-Key': '24d52a531dmsh693cfe90d613d38p1a8e61jsn6a752b08adf5',
+                'X-RapidAPI-Host': 'api-football-v1.p.rapidapi.com'
+            }
+        }
+
+        try:
+            response = requests.request(**options)
+            response.raise_for_status()
+            data = response.json()
+            return JsonResponse(data)
+        except Exception as e:
+            return JsonResponse({'error': str(e)})
