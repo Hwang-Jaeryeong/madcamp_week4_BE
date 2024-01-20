@@ -162,3 +162,35 @@ class GetStandings(View):
             return JsonResponse(data)
         except Exception as e:
             return JsonResponse({'error': str(e)})
+
+def get_top_scorers(request):
+    api_url = 'https://api-football-v1.p.rapidapi.com/v3/players/topscorers'
+    headers = {
+        'X-RapidAPI-Key': '24d52a531dmsh693cfe90d613d38p1a8e61jsn6a752b08adf5',
+        'X-RapidAPI-Host': 'api-football-v1.p.rapidapi.com'
+    }
+    params = {
+        'league': '39',
+        'season': request.GET.get('season', '2023'),
+    }
+
+    try:
+        response = requests.get(api_url, headers=headers, params=params)
+        response.raise_for_status()  # 에러가 발생하면 예외를 일으킵니다.
+        data = response.json()
+
+        # 여기에서 API 응답을 가공하고 필요한 데이터를 추출합니다.
+        top_scorers = data.get('response', [])
+
+        # 예시: 간단하게 상위 5명의 득점자 이름과 골 수를 가져오는 코드
+        top_scorers_info = [{'name': player['player']['name'], 'goals': player['statistics'][0]['goals']} for player in top_scorers[:5]]
+
+        return JsonResponse({'top_scorers': top_scorers_info})
+    except requests.exceptions.HTTPError as errh:
+        return JsonResponse({'error': f'HTTP Error: {errh}'}, status=500)
+    except requests.exceptions.ConnectionError as errc:
+        return JsonResponse({'error': f'Error Connecting: {errc}'}, status=500)
+    except requests.exceptions.Timeout as errt:
+        return JsonResponse({'error': f'Timeout Error: {errt}'}, status=500)
+    except requests.exceptions.RequestException as err:
+        return JsonResponse({'error': f'Error: {err}'}, status=500)

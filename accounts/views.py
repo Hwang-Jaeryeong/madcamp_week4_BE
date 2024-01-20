@@ -12,8 +12,9 @@ from .serializers import CustomUserSerializer
 def register_user(request):
     data = request.data
     serializer = CustomUserSerializer(data=data)
+    selected_team = request.data.get('selected_team')
     if serializer.is_valid():
-        serializer.save()
+        serializer.save(selected_team=selected_team)
         return Response(serializer.data, status=status.HTTP_201_CREATED)
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
