@@ -89,3 +89,53 @@ class GetLineupPredictions(View):
             return JsonResponse({"error": f"Timeout Error: {errt}"}, status=500)
         except requests.exceptions.RequestException as err:
             return JsonResponse({"error": f"Error: {err}"}, status=500)
+
+class GetFixtureEvents(View):
+    def get(self, request, fixture_id):
+        # Get team information
+        team_info_url = 'https://api-football-v1.p.rapidapi.com/v3/teams'
+        params = {}
+        headers = {
+            'X-RapidAPI-Key': '24d52a531dmsh693cfe90d613d38p1a8e61jsn6a752b08adf5',
+            'X-RapidAPI-Host': 'api-football-v1.p.rapidapi.com'
+        }
+
+        try:
+            response = requests.get(team_info_url, params=params, headers=headers)
+            response.raise_for_status()
+            team_data = response.json()
+
+            # Create a dictionary to store yellow and red card counts for each team
+            yellow_red_count = {}
+
+            # Get fixture events
+            events_url = 'https://api-football-v1.p.rapidapi.com/v3/fixtures/events'
+            params = {'fixture': fixture_id}
+            response = requests.get(events_url, params=params, headers=headers)
+            response.raise_for_status()
+            data = response.json()
+
+            # Count yellow and red cards for each team
+            for event in data.get('response', []):
+                team_name = event.get('team', {}).get('name', '')
+                if team_name:
+                    if team_name not in yellow_red_count:
+                        yellow_red_count[team_name] = {'yellow': 0, 'red': 0}
+                    if event.get('type', '') == 'Card':
+                        if event.get('detail', '') == 'Yellow Card':
+                            yellow_red_count[team_name]['yellow'] += 1
+                        elif event.get('detail', '') == 'Red Card':
+                            yellow_red_count[team_name]['red'] += 1
+
+            # Convert counts to integers
+            for team_name, card_counts in yellow_red_count.items():
+                card_counts['yellow'] = int(card_counts['yellow'])
+                card_counts['red'] = int(card_counts['red'])
+
+            # Add yellow and red card counts to the response
+            data['yellow_red_count'] = yellow_red_count
+
+            return JsonResponse(data)
+
+        except Exception as e:
+            return JsonResponse({'error': str(e)})
