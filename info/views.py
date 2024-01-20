@@ -65,3 +65,27 @@ def get_predictions(request, fixture_id):
         return JsonResponse({"error": f"Timeout Error: {errt}"}, status=500)
     except requests.exceptions.RequestException as err:
         return JsonResponse({"error": f"Error: {err}"}, status=500)
+
+
+class GetLineupPredictions(View):
+    def get(self, request, fixture_id):
+        url = 'https://api-football-v1.p.rapidapi.com/v3/fixtures/lineups'
+        params = {'fixture': fixture_id}
+        headers = {
+            'X-RapidAPI-Key': '24d52a531dmsh693cfe90d613d38p1a8e61jsn6a752b08adf5',
+            'X-RapidAPI-Host': 'api-football-v1.p.rapidapi.com'
+        }
+
+        try:
+            response = requests.get(url, params=params, headers=headers)
+            response.raise_for_status()
+            data = response.json()
+            return JsonResponse(data)
+        except requests.exceptions.HTTPError as errh:
+            return JsonResponse({"error": f"HTTP Error: {errh}"}, status=500)
+        except requests.exceptions.ConnectionError as errc:
+            return JsonResponse({"error": f"Error Connecting: {errc}"}, status=500)
+        except requests.exceptions.Timeout as errt:
+            return JsonResponse({"error": f"Timeout Error: {errt}"}, status=500)
+        except requests.exceptions.RequestException as err:
+            return JsonResponse({"error": f"Error: {err}"}, status=500)
