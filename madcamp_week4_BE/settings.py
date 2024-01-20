@@ -50,6 +50,7 @@ INSTALLED_APPS = [
 
     # My Apps
     'accounts',
+    'info',
 ]
 
 # Authentication backends
