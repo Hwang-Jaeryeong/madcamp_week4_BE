@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import get_fixtures, get_predictions, GetLineupPredictions,GetFixtureEvents, GetStandings, get_top_scorers, get_match
+from .views import get_fixtures, get_predictions, GetLineupPredictions,GetFixtureEvents, GetStandings, get_top_scorers, get_match, get_allmatches
 
 urlpatterns = [
     path('get_fixtures/', get_fixtures, name='get_fixtures'),
@@ -9,4 +9,5 @@ urlpatterns = [
     path('get_standings/', GetStandings.as_view(), name='get_standings'),
     path('get_top_scorers/', get_top_scorers, name='get_top_scorers'),
     path('get_match/', get_match, name='get_match'),
+    path('get_allmatches/', get_allmatches, name='get_allmatches'),
 ]
