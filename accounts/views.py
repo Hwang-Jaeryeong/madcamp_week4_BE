@@ -6,16 +6,24 @@ from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework_simplejwt.tokens import RefreshToken
 from .models import CustomUser
 from .serializers import CustomUserSerializer
+from llo.models import SelectedTeam
 
 @api_view(['POST'])
 @permission_classes([AllowAny])
 def register_user(request):
     data = request.data
     serializer = CustomUserSerializer(data=data)
-    selected_team = request.data.get('selected_team')
+    selected_team_id = request.data.get('selected_team')  # 'selected_team'로부터 팀 ID를 받아옴
     if serializer.is_valid():
-        serializer.save(selected_team=selected_team)
-        return Response(serializer.data, status=status.HTTP_201_CREATED)
+        user = serializer.save()
+
+        # 선택한 팀 정보를 사용자와 연결
+        if selected_team_id:
+            selected_team = SelectedTeam.objects.get(id=selected_team_id)
+            user.selected_team = selected_team
+            user.save()
+
+        return Response({'detail': 'User registered successfully'}, status=status.HTTP_201_CREATED)
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(['POST'])
@@ -42,9 +50,9 @@ def login_user(request):
 
     # 인증 실패
     return Response({'detail': 'Invalid credentials'}, status=status.HTTP_401_UNAUTHORIZED)
+
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
 def logout_user(request):
     # You can add additional logout logic here if needed
     return Response({'detail': 'Successfully logged out'}, status=status.HTTP_200_OK)
-
