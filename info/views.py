@@ -194,3 +194,24 @@ def get_top_scorers(request):
         return JsonResponse({'error': f'Timeout Error: {errt}'}, status=500)
     except requests.exceptions.RequestException as err:
         return JsonResponse({'error': f'Error: {err}'}, status=500)
+
+
+def get_match(request):
+    url = 'https://api-football-v1.p.rapidapi.com/v3/fixtures'
+    params = {
+        'league': '39',
+        'season': '2023',
+        'next': '5',
+    }
+    headers = {
+        'X-RapidAPI-Key': '24d52a531dmsh693cfe90d613d38p1a8e61jsn6a752b08adf5',
+        'X-RapidAPI-Host': 'api-football-v1.p.rapidapi.com',
+    }
+
+    try:
+        response = requests.get(url, params=params, headers=headers)
+        response.raise_for_status()  # Raise an exception for bad responses
+        data = response.json()
+        return JsonResponse(data)
+    except requests.exceptions.RequestException as e:
+        return JsonResponse({'error': str(e)})
