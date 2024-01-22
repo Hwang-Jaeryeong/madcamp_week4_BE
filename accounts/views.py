@@ -38,6 +38,23 @@ def login_user(request):
     # 유저가 존재하고 비밀번호가 일치하면
     if user and user.password == password:
         refresh = RefreshToken.for_user(user)
+
+        # llo_selectedteam에서 team 정보 가져오기
+        selected_team_id = user.selected_team_id
+        team_name = None
+        logo_url = None
+        if selected_team_id:
+            try:
+                selected_team = SelectedTeam.objects.get(id=selected_team_id)
+                team_name = selected_team.team_name
+                logo_url = f'http://ec2-43-202-210-226.ap-northeast-2.compute.amazonaws.com/media/{selected_team.logo}'
+            except SelectedTeam.DoesNotExist:
+                pass  # 팀이 없을 때는 기본값인 None 유지
+
+        print('selected_team_id from user:', user.selected_team_id)
+        print('team_name:', team_name)
+        print('logo_url:', logo_url)
+
         data = {
             'access_token': str(refresh.access_token),
             'refresh_token': str(refresh),
@@ -45,12 +62,14 @@ def login_user(request):
             'username': user.username,
             'phone_number': user.phone_number,
             'nickname': user.nickname,
+            'selected_team_id': selected_team_id,
+            'team_name': team_name,
+            'logo_url': logo_url,
         }
         return Response(data, status=status.HTTP_200_OK)
 
     # 인증 실패
     return Response({'detail': 'Invalid credentials'}, status=status.HTTP_401_UNAUTHORIZED)
-
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
 def logout_user(request):
