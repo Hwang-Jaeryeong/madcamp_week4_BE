@@ -271,3 +271,27 @@ def get_fixture_statistics(request, fixture_id):
         return JsonResponse(data)
     except requests.exceptions.RequestException as e:
         return JsonResponse({'error': str(e)})
+
+
+from django.http import JsonResponse
+import requests
+
+def get_players(request):
+    url = 'https://api-football-v1.p.rapidapi.com/v3/players'
+    params = {
+        'team': request.GET.get('team', '47'),
+        'league': '39',
+        'season': '2023',
+    }
+    headers = {
+        'X-RapidAPI-Key': '24d52a531dmsh693cfe90d613d38p1a8e61jsn6a752b08adf5',
+        'X-RapidAPI-Host': 'api-football-v1.p.rapidapi.com',
+    }
+
+    try:
+        response = requests.get(url, params=params, headers=headers)
+        response.raise_for_status()  # Raise an exception for bad responses
+        data = response.json()
+        return JsonResponse(data)
+    except requests.exceptions.RequestException as e:
+        return JsonResponse({'error': str(e)})
