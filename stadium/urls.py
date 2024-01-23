@@ -5,3 +5,4 @@ urlpatterns = [
     path('', StadiumAPIView.as_view(), name='get-stadium'),
     path('upload/', StadiumUpload.as_view(), name='stadium-upload'),
 ]
+
