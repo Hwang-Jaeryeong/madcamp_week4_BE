@@ -198,11 +198,18 @@ def get_top_scorers(request):
 
 def get_match(request):
     url = 'https://api-football-v1.p.rapidapi.com/v3/fixtures'
+    team_value = request.GET.get('team', None)
+
+    # params 딕셔너리 초기화
     params = {
         'league': '39',
         'season': '2023',
-        'next': '3',
+        'next': '3'
     }
+
+    # team_value가 None이 아닌 경우 params에 추가
+    if team_value is not None:
+        params['team'] = team_value
     headers = {
         'X-RapidAPI-Key': '24d52a531dmsh693cfe90d613d38p1a8e61jsn6a752b08adf5',
         'X-RapidAPI-Host': 'api-football-v1.p.rapidapi.com',
