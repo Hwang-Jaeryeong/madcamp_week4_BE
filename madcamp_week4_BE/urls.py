@@ -9,4 +9,5 @@ urlpatterns = [
     path('llo/', include('llo.urls')),
     path('news/', include('news.urls')),
     path('video/', include('video.urls')),
+    path('stadium/', include('stadium.urls')),
 ]
