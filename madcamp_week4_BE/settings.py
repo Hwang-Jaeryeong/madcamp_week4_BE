@@ -53,6 +53,7 @@ INSTALLED_APPS = [
     'info',
     'llo',
     'news',
+    'video',
 ]
 
 # Authentication backends
