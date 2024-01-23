@@ -18,7 +18,7 @@ class StadiumAPIView(APIView):
 
         if user.selected_team:
             selected_team_id = user.selected_team.id
-            stadium_data = Stadium.objects.filter(id=selected_team_id).values('team_name', 'stadium', 'stadium_image').first()
+            stadium_data = Stadium.objects.filter(id=selected_team_id).values('team_name', 'stadium', 'stadium_image', 'teamId').first()
 
             if stadium_data:
                 return Response(stadium_data, status=status.HTTP_200_OK)
