@@ -4,4 +4,4 @@ from .models import Stadium
 class StadiumSerializer(serializers.ModelSerializer):
     class Meta:
         model = Stadium
-        fields = ('team_name', 'stadium', 'stadium_image')
+        fields = '__all__'
