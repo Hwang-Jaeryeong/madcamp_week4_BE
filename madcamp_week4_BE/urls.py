@@ -10,4 +10,5 @@ urlpatterns = [
     path('news/', include('news.urls')),
     path('video/', include('video.urls')),
     path('stadium/', include('home.urls')),
+    path('community/', include('community.urls')),
 ]
