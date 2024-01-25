@@ -40,7 +40,10 @@
 home 화면에는 위와 같이 경기 팀들과 날짜, 시간, 경기 score 결과를 볼 수 있다.
 - 실시간 데이터와 직접 연결했기 때문에 한 경기가 더 치뤄지거나, PL에서 score에 변동을 주면 우리 앱에서도 변동사항이 반영된다.
 
-[사진]
+<div style="display: flex; justify-content: space-around;">
+    <img src="https://github.com/Hwang-Jaeryeong/madcamp_week4_BE/assets/113423770/d00ae304-00ea-49ff-8a16-dcbf1baf563f" alt="booking" width="200"/>
+    <img src="https://github.com/Hwang-Jaeryeong/madcamp_week4_BE/assets/113423770/6d2d5de7-d442-434c-8ad5-19adac443a92" alt="mobile_ticket" width="200"/>
+</div>
 - 저 Previous Matches에 떠있는 어떤 경기를 선택해 들어가게 되면 hightlights 영상을 유튜브에서 불러오게 된다. 유튜브 api를 사용하면 광고가 계속해서 반복 재생되어서 html 안에서 구글 정보와 유튜브 검색 주소를 쭉 나열해 필터링을 한 후 링크 순서와 함께 각 경기에 함수를 통해 바인딩하였다.
 - xG, Shooting 개수, Shots on Target, Corners, Offside, Total Passes, 패스 성공률, 총 점유율, Fouls, 옐로카드와 레드 카드 갯수까지 실제 데이터와 연결하여 집계하였다.
 
